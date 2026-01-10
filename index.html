@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Schadensmeldung</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      margin-top: 10px;
+      display: block;
+      font-weight: bold;
+    }
+    select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+    }
+    button {
+      background: #2ecc71;
+      color: white;
+      border: none;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #27ae60;
+    }
+    .success {
+      color: green;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Schadensmeldung</h1>
+
+  <label>In welchem Gebäude?</label>
+  <select id="gebaeude">
+    <option>A</option>
+    <option>B</option>
+    <option>C</option>
+    <option>D</option>
+    <option>L</option>
+    <option>Metallwerkstatt</option>
+    <option>Holzwerkstatt</option>
+    <option>Forum</option>
+    <option>Bauhalle 1</option>
+    <option>Bauhalle 2</option>
+  </select>
+
+  <label>Was ist das Problem?</label>
+  <select id="problem">
+    <option>Tür kaputt</option>
+    <option>Toilette defekt</option>
+    <option>Licht kaputt</option>
+    <option>Fenster kaputt</option>
+    <option>Heizung defekt</option>
+    <option>Sonstiges</option>
+  </select>
+
+  <label>Beschreibung</label>
+  <textarea id="beschreibung" placeholder="Beschreibe das Problem genauer"></textarea>
+
+  <button onclick="senden()">Meldung absenden</button>
+
+  <p class="success" id="success"></p>
+  
+
+</div>
+
+<script>
+  function senden() {
+    const meldung = {
+      gebaeude: document.getElementById("gebaeude").value,
+      problem: document.getElementById("problem").value,
+      beschreibung: document.getElementById("beschreibung").value,
+      status: "Offen",
+      zeit: new Date().toLocaleString()
+    };
+
+    try {
+      let meldungen = JSON.parse(localStorage.getItem("meldungen")) || [];
+      meldungen.push(meldung);
+      localStorage.setItem("meldungen", JSON.stringify(meldungen));
+
+      document.getElementById("success").innerText =
+        "Meldung wurde anonym versendet!";
+
+      document.getElementById("beschreibung").value = "";
+    } catch (e) {
+      alert("Fehler beim Senden: Zugriff auf lokalen Speicher verweigert. Browser-Sicherheitseinstellungen prüfen.");
+      console.error(e);
+    }
+  }
+</script>
+
+</body>
+</html>
